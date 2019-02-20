@@ -26,6 +26,7 @@ public class Answer {
 	}
 
 	public String getText() {
+		return text;
 		
 	}
 

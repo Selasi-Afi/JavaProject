@@ -41,7 +41,7 @@ public class Main {
    	 if (verification.equalsIgnoreCase("student")) {
    		int studentBlock= scanner.nextInt();
    		
-   		System.out.println("Enter the question topic of the question to be read");
+   		System.out.println("Enter the question topic of the question to be answered");
 		  String inout = scanner.nextLine();
 		  Question retrieveQuestion = new Question();
 		  List<Question> retrieveList = new ArrayList<>();

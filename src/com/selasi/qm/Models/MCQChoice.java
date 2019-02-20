@@ -38,14 +38,7 @@ public class MCQChoice {
 	}
 
 	public MCQQuestion getQuestion() {
-		 Map<String, String[]> condition = new HashMap<String, String[]>();
 
-	      condition.put("QUESTION", new String[] {"=", "QUESTION"});
-
-	      String[] fields = {"ID,QUESTION"};
-	    
-
-	      String[][] result = db.select("QUESTIONS", fields, condition);
 			return question;
 		
 	}
@@ -63,15 +56,7 @@ public class MCQChoice {
 	}
 	
 	public int getId() {
-		 Map<String, String[]> condition = new HashMap<String, String[]>();
-
-	      condition.put("ID", new String[] {"=", "ID"});
-
-	      String[] fields = {"ID,TEXT"};
-	    
-
-	      String[][] result = db.select("MCQCHOICE", fields, condition);
-			return id;
+		return id;
 	}
 
 	public void setId(int id) {
