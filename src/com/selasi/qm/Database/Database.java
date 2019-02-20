@@ -90,7 +90,7 @@ public class Database {
         String sql = "INSERT INTO QUESTIONS ID, QUESTION, DIFFICULTY, TYPE VALUES (?,?,?,?)";
 
         try {
-        	
+        	// commit test
             ps = dbconnect.prepareStatement(sql);
             ps.setString (1, id);
             ps.setString (2, question);
