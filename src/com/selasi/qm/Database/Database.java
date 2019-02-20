@@ -1,13 +1,18 @@
 package com.selasi.qm.Database;
 
 import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
+import com.selasi.qm.Models.Question;
+
 
 
 public class Database {
@@ -15,6 +20,11 @@ public class Database {
     private Connection dbconnect;
     private PreparedStatement ps;
     private Properties properties;
+	private static final String SEARCH_QUERY = "SELECT * FROM QUESTIONS WHERE ID = ?";
+	private static final String UPDATE_QUERY = "UPDATE QUESTIONS SET QUESTION=?,DIFFICULTY=?,CHOICE1=?,CHOICE2=?,CHOICE3=?,CHOICE4=? WHERE ID=?";
+	private static final String DELETE_QUERY = "DELETE  from QUESTIONS where ID =?";
+	private static final String DELETEQuestion_QUERY = "DELETE  from topic where QUESTIONID =?";
+
 
     public Database() {
         File file = new File("config/db.properties");
@@ -73,19 +83,6 @@ public class Database {
     public boolean insert(String id, String question, String difficulty,String type,String a1,String a2,String a3,String a4) {
         boolean success = false;
 
-//        StringBuilder fields, questionMarks;
-//        fields = new StringBuilder(" (");
-//        questionMarks = new StringBuilder(" values(");
-//        int size = dictionary.size();
-//        for (int i = 0; i < size; i++) {
-//            if (i < size - 1) {
-//                fields.append(dictionary.keySet().toArray()[i]).append(", ");
-//                questionMarks.append("?, ");
-//            } else {
-//                fields.append(dictionary.keySet().toArray()[i]).append(")");
-//                questionMarks.append("?)");
-//            }
-//        }
 
         String sql = "INSERT INTO QUESTIONS VALUES (?,?,?,?,?,?,?,?)";
 
@@ -104,7 +101,7 @@ public class Database {
 			ps.setString (8, a4);
 			
 		
-			int rs = ps.executeUpdate();
+			int result = ps.executeUpdate();
 						
 			
 
@@ -116,113 +113,83 @@ public class Database {
     }
     
 
-    public boolean update(String table) {
-        boolean success = false;
-//        String conditions = conditions(condition);
-//        StringBuilder changes;
-//        changes = new StringBuilder(" ");
-//        int size = change.size();
-//        for (int i = 0; i < size; i++) {
-//            if (i < size - 1) {
-//                changes.append(change.keySet().toArray()[i]).append(" = ?, ");
-//            } else {
-//                changes.append(change.keySet().toArray()[i]).append(" = ? ");
-//            }
-        
 
-        String sql = "UPDATE " + table + " SET COLUMN_NAME=? WHERE ID = ? ";
+    public void update(Question question) {
+		try {
+			PreparedStatement ps = dbconnect.prepareStatement(UPDATE_QUERY);
+			System.out.println("-------");
+			System.out.println(question.getQuestion());
+			System.out.println(question.getDifficulty());
+			System.out.println(question.getChoice1());
+			System.out.println(question.getChoice2());
+			System.out.println(question.getChoice3());
+			System.out.println(question.getChoice4());
+			System.out.println(question.getId());
+			System.out.println("-------");
+			ps.setString(1, question.getQuestion());
+			ps.setInt(2, question.getDifficulty());
+			ps.setString(3, question.getChoice1());
+			ps.setString(4, question.getChoice2());
+			ps.setString(5, question.getChoice3());
+			ps.setString(6, question.getChoice4());
+			ps.setInt(7, question.getId());
+			int check = ps.executeUpdate();
+			boolean isUpdated = (check > 0);
+			if(isUpdated)
+				System.out.println("Question successfully comments");
+			else
+				System.out.println("Question not successfully updated");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-        try {
-            ps = dbconnect.prepareStatement(sql);
-            
-            Scanner  scanner = new Scanner(System.in); 
-			System.out.println("Please enter your column_name");
-			String column= scanner.nextLine();
-			System.out.println("Please enter the ID");
-			String identify = scanner.nextLine();
-	            ps.setString (1, column);
-				ps.setString (2, identify);
-				int rs = ps.executeUpdate();
-				
+
+    public void delete(Question question) {
+		try {
+			PreparedStatement ps = dbconnect.prepareStatement(DELETEQuestion_QUERY);
+			ps.setInt(1, question.getId());
+			ps.execute();
+			ps.close();
+			PreparedStatement sp = dbconnect.prepareStatement(DELETE_QUERY);
+			sp.setInt(1, question.getId());
+			sp.execute();
+			sp.close();
+			//connection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+    
+
+   
+    public List<Question> search(Question question) {
+		List<Question> questions = new ArrayList<>();
+		try {
+            PreparedStatement ps = dbconnect.prepareStatement(SEARCH_QUERY);
+			ps.setInt(1, question.getId());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				Question currentQuestion = new Question();
+				currentQuestion.setId(rs.getInt("ID"));
+				currentQuestion.setQuestion(rs.getString("QUESTION"));
+				currentQuestion.setDifficulty(rs.getInt("DIFFICULTY"));
+				currentQuestion.setType(rs.getString("TYPE"));
+				currentQuestion.setChoice1(rs.getString("CHOICE1"));
+				currentQuestion.setChoice2(rs.getString("CHOICE2"));
+				currentQuestion.setChoice3(rs.getString("CHOICE3"));
+				currentQuestion.setChoice4(rs.getString("CHOICE4"));
+				questions.add(currentQuestion);
+			}
+			ps.close();
 			
-            
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return questions;
+	}
 
-//            size = change.size();
-//            int count = 1;
-//            for (int i = 0; i < size; i++) {
-//                ps.setString(count, change.values().toArray()[i].toString());
-//                count++;
-//            }
-//            size = condition.size();
-//            for (int i = 0; i < size; i++) {
-//                ps.setString(count, condition.get(condition.keySet().toArray()[i])[1]);
-//                count++;
-//            }
-//            if (ps.executeUpdate() == 1) {
-//                success = true;
-//            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return success;
-    }
-
-
-    public boolean delete(String table) {
-        boolean success = false;
-        String sql = "DELETE FROM " + table + " WHERE ID = ?";
-
-        try {
-        	 Scanner  scanner = new Scanner(System.in); 
- 			
- 			System.out.println("Please enter the ID");
- 			String identify = scanner.nextLine();
- 	           
- 				ps.setString (1, identify);
- 				int rs = ps.executeUpdate();
-            ps = dbconnect.prepareStatement(sql);
-//            buildBindParam(condition);
-//            if (ps.executeUpdate() == 1) {
-//                success = true;
-				success = ps.execute();
-
-            }
-       catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return success;
-    }
-
-    public String select(String table) {
-        
-        String sql = "SELECT * FROM " + table + " WHERE=?";
-
-        try {
-            ps = dbconnect.prepareStatement(sql);
-            Scanner  scanner = new Scanner(System.in); 
-			
-			
-			
-
-            ResultSet rs = ps.executeQuery();
-            String data= rs.getString("QUESTIONS");
-             String answer;
-             answer=rs.getString("ANSWER");
-             System .out.println (data);
-             System .out.println (answer);
-             
-
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-		return null;
-        
-		//Object data;
-		
-    }
+   
     
     public String Login() {
     	
@@ -265,6 +232,7 @@ public class Database {
  
     	
     }
+    
     
 
 }
