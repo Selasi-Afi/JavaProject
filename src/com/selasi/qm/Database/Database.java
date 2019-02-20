@@ -70,7 +70,7 @@ public class Database {
     }
 
 
-    public boolean insert(String id, String question, String difficulty,String type) {
+    public boolean insert(String id, String question, String difficulty,String type,String a1,String a2,String a3,String a4) {
         boolean success = false;
 
 //        StringBuilder fields, questionMarks;
@@ -87,7 +87,7 @@ public class Database {
 //            }
 //        }
 
-        String sql = "INSERT INTO QUESTIONS ID, QUESTION, DIFFICULTY, TYPE VALUES (?,?,?,?)";
+        String sql = "INSERT INTO QUESTIONS VALUES (?,?,?,?,?,?,?,?)";
 
         try {
         	// commit test
@@ -97,6 +97,11 @@ public class Database {
 
 			ps.setString (3, difficulty);
 			ps.setString (4, type);
+			ps.setString (5, a1);
+            ps.setString (6, a2);
+
+			ps.setString (7, a3);
+			ps.setString (8, a4);
 			
 		
 			int rs = ps.executeUpdate();
@@ -109,7 +114,7 @@ public class Database {
 
         return success;
     }
-
+    
 
     public boolean update(String table) {
         boolean success = false;

@@ -23,6 +23,7 @@ import java.util.Map;
 
 
 public class Main {
+	public static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
     	
@@ -30,6 +31,7 @@ public class Main {
 
    	 String verification = db.Login();
    	 Scanner  scanner = new Scanner(System.in);
+   	
 		  
 
    	 if (verification.equalsIgnoreCase("student")) {
@@ -50,38 +52,54 @@ public class Main {
    		 
    		
 		 case 1:
-			 	System.out.println("Please enter the table you want to edit");
-			 	String id = scanner.nextLine();
-				System.out.println("Please enter your desired question");
-				String question= scanner.nextLine();
+			 	
+				System.out.println("Please enter your ID");
+				String id= input.nextLine();
+				System.out.println("Please enter your question");
+				String question= input.nextLine();
 				System.out.println("Please enter your desired difficulty");
-				String difficulty = scanner.nextLine();
+				String difficulty = input.nextLine();
 				System.out.println("Please enter your desired type");
-				String type = scanner.nextLine();
-			 db.insert(id,question,difficulty,type);
-			 break;
-		    
-		  case 2:
-			  String fun_table = scanner.nextLine();
-			  db.select(fun_table);
-			  break;
-		
-		  case 3:
-			  String querry_table = scanner.nextLine();
-			  db.update(querry_table);
-			  break;
-		  case 4:
-			  String del_table = scanner.nextLine();
-			  db.delete(del_table); 
-			  break;
-	   	  default:
-	   		  System.out.println("Invalid Option");
-   		  }
+				String type = input.nextLine();
+				System.out.println("Please enter your possible answer a");
+				String a1= input.nextLine();
+				System.out.println("Please enter your possible answer b");
+				String a2= input.nextLine();
+				System.out.println("Please enter your possible answer c");
+				String a3 = input.nextLine();
+				System.out.println("Please enter your possible answer d");
+				String a4 = input.nextLine();
+
+				db.insert(id,question,difficulty,type,a1,a2,a3,a4);
+				
+				}
+					//db.insert(id, question, difficulty, type)
+				}
    	 }
-   	 else {
-   		 System.out.println("You are not welcome");
-    
-   	 }
+//			 
+//			 break;
+//		    
+//		  case 2:
+//			  String fun_table = scanner.nextLine();
+//			  db.select(fun_table);
+//			  break;
+//		
+//		  case 3:
+//			  String querry_table = scanner.nextLine();
+//			  db.update(querry_table);
+//			  break;
+//		  case 4:
+//			  String del_table = scanner.nextLine();
+//			  db.delete(del_table); 
+//			  break;
+//	   	  default:
+//	   		  System.out.println("Invalid Option");
+//   		  }
+//   	 }
+//   	 else {
+//   		 System.out.println("You are not welcome");
+//    
+//   	 }
    	 
    	 
 
@@ -228,5 +246,3 @@ public class Main {
 //    }
 //
  }
-}
-
