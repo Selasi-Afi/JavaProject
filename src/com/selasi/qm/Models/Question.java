@@ -16,7 +16,7 @@ public class Question {
 
 	private String question;
 
-	private String[] topics;
+	private String topics;
 
 	private int difficulty;
 	
@@ -66,7 +66,7 @@ public class Question {
 		this.question = question;
 	}
 
-	public String[] getTopics() {
+	public String getTopics() {
 		//THE TOPICS CODE GOES HERE
 		
 		
@@ -75,7 +75,7 @@ public class Question {
 		return topics;
 	}
 
-	public void setTopics(String[] topics) {
+	public void setTopics(String topics) {
 		this.topics = topics;
 	}
 
@@ -153,10 +153,13 @@ public class Question {
 	}
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", question=" + question + ", topics=" + Arrays.toString(topics) + ", difficulty="
+		return "Question [id=" + id + ", question=" + question + ", topics=" + (topics) + ", difficulty="
 				+ difficulty+",type=" + type + ", choice1" +choice1+", choice2" + choice2 +", choice3" + choice3 + ", choice4" + choice4 + "]";
 	}
-
+	
+	public String toQuestion() {
+		return question + "\n" + "1) " + choice1 + "\n" + "2) " + choice2 + "\n" + "3) " + choice3 + "\n" + "4) " + choice2;
+	}
 	
 
 }

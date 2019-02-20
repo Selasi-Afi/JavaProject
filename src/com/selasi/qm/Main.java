@@ -41,11 +41,26 @@ public class Main {
    	 if (verification.equalsIgnoreCase("student")) {
    		int studentBlock= scanner.nextInt();
    		
+   		System.out.println("Enter the question topic of the question to be read");
+		  String inout = scanner.nextLine();
+		  Question retrieveQuestion = new Question();
+		  List<Question> retrieveList = new ArrayList<>();
+		  retrieveQuestion.setTopics(inout);
+		  retrieveList = db.getQuiz(retrieveQuestion);
+		  List<String> answers = new ArrayList<>();
+		  System.out.println("The compiled questions details are");
+		  for(int i=0;i<retrieveList.size();i++)
+		  {
+			  System.out.println(retrieveList.get(i).toQuestion());
+			  String answer = scanner.nextLine();
+			  answers.add(answer);
+		  }
+   		
    	 }
    	 else if (verification.equalsIgnoreCase("admin")){
    		//Scanner  scanner = new Scanner(System.in);
    		 
-   		 System.out.println("Please enter 1 for Create, 2 for Update, 3 for update and 4 for Delete");
+   		 System.out.println("Please enter 1 for Create, 2 for Update, 3 for update and 4 for Delete and 5 for Quiz");
    		 String adminBlock= scanner.nextLine();
    		 
 //   		 System.out.println("Please enter the table you want to edit");
@@ -173,6 +188,21 @@ public class Main {
 			  Question delQuestion = new Question();
 			  delQuestion.setId(qid);
 			  db.delete(delQuestion);
+			  
+			  break;
+		  case 5:
+			  System.out.println("Enter the question topic of the question to be read");
+			  String inout = scanner.nextLine();
+			  Question retrieveQuestion = new Question();
+			  List<Question> retrieveList = new ArrayList<>();
+			  retrieveQuestion.setTopics(inout);
+			  retrieveList = db.getQuiz(retrieveQuestion);
+			  System.out.println("The compiled questions details are");
+			  for(int i=0;i<retrieveList.size();i++)
+			  {
+				  
+			  }
+			  
 			  
 			  break;
 

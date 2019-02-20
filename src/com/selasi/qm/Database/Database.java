@@ -24,6 +24,7 @@ public class Database {
 	private static final String UPDATE_QUERY = "UPDATE QUESTIONS SET QUESTION=?,DIFFICULTY=?,CHOICE1=?,CHOICE2=?,CHOICE3=?,CHOICE4=? WHERE ID=?";
 	private static final String DELETE_QUERY = "DELETE  from QUESTIONS where ID =?";
 	private static final String DELETEQuestion_QUERY = "DELETE  from topic where QUESTIONID =?";
+	private static final String QUIZ_Query = "SELECT * FROM TOPIC JOIN QUESTIONS WHERE  TOPIC.TOPICTYPE = ? ORDER BY RAND() LIMIT 3";
 
 
     public Database() {
@@ -189,7 +190,42 @@ public class Database {
 		return questions;
 	}
 
-   
+    public List<Question> getQuiz(Question question) {
+		List<Question> questions = new ArrayList<>();
+//		String topicStr = "";
+//		for(int i = 0; i < topics.size(); i++) {
+//			if(i == (topics.size() - 1)) {
+//				topicStr += "TOPIC.TOPICTYPE=" + topics + ")";
+//			}else {
+//				topicStr += "TOPIC.TOPICTYPE=" + topics + " OR ";
+//			}
+//		}
+//		String searchQuery = "";
+//		if(topicStr == "") {
+//			searchQuery = QUIZ_Query + " ORDER BY RAND() LIMIT 10;";
+//		}else {
+//			searchQuery = QUIZ_Query + " AND ("+ topicStr + " ORDER BY RAND() LIMIT 10;";
+//		}
+		try {
+            PreparedStatement ps = dbconnect.prepareStatement(QUIZ_Query);
+            ps.setString(1, question.getTopics());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				Question currentQuestion = new Question();
+				currentQuestion.setQuestion(rs.getString("QUESTION"));
+				currentQuestion.setChoice1(rs.getString("CHOICE1"));
+				currentQuestion.setChoice2(rs.getString("CHOICE2"));
+				currentQuestion.setChoice3(rs.getString("CHOICE3"));
+				currentQuestion.setChoice4(rs.getString("CHOICE4"));
+				questions.add(currentQuestion);
+			}
+			ps.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return questions;
+	}
     
     public String Login() {
     	
