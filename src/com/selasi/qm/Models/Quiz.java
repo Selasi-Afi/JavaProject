@@ -26,14 +26,7 @@ public class Quiz {
    
 
     public String getTitle() {
-    	 Map<String, String[]> condition = new HashMap<String, String[]>();
 
-         condition.put("TITLE", new String[] {"=", "TITLE"});
-
-         String[] fields = {"TITLE"};
-       
-
-         String[][] result = db.select("QUIZ", fields, condition);
    		
         return title;
     }
